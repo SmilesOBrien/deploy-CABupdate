@@ -1,0 +1,26 @@
+# Variables
+$driverUrl = "ADD MICROSOFT CATALOGUE DRIVER URL HERE"
+$CABPath = "ADD LOCAL PATH TO STORE DRIVER HERE"
+$extractedCAB = "ADD LOCAL PATH TO EXTRACT DRIVER HERE"
+
+# Create the destination directory if it doesn't exist
+if (!(Test-Path $CABPath)) {
+    New-Item -Path $CABPath -ItemType Directory
+}
+
+# Create Extraction folder if it doesn't exist
+if (!(Test-Path $extractedCAB)) {
+    New-Item -Path $extractedCAB -ItemType Directory
+}
+
+# Download and name the .CAB file. Update the below name of this file to your discretion
+Invoke-WebRequest -Uri $driverUrl -OutFile "$CABPath\ADD CAB NAME HERE.cab"
+
+# Extract the driver files (adjust the extraction paths as needed). Use the CAB name you specified in the previous step.
+cmd.exe /c "C:\Windows\System32\expand.exe" $CABPath\ADD CAB NAME HERE.cab -f:* $extractedCAB 
+
+# Assuming you have the INF file path of the new driver. Use the appropriate .inf from the extracted data
+$infFilePath = "$extractedCAB\ADD INF FILE HERE.inf" 
+
+# Update the driver
+Start-process pnputil -verb runas -argumentlist "/add-driver $infFilePath /install /subdirs"
