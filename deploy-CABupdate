@@ -24,3 +24,6 @@ $infFilePath = "$extractedCAB\ADD INF FILE HERE.inf"
 
 # Update the driver
 Start-process pnputil -verb runas -argumentlist "/add-driver $infFilePath /install /subdirs"
+
+# Delete install files after install completes
+Remove-Item -Recurse -Force $CABPath
